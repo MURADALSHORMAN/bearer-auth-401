@@ -16,12 +16,12 @@ users.virtual('token').get(function () {
   let tokenObject = {
     username: this.username,
   }
-  return jwt.sign(tokenObject,SECRET)
+  return jwt.sign(tokenObject,SECRET,{ expiresIn: '15m' })
 });
 
 users.pre('save', async function () {
   if (this.isModified('password')) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
   }
 });
 

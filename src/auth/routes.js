@@ -22,21 +22,21 @@ authRouter.post('/signup', async (req, res, next) => {
 });
 
 authRouter.post('/signin', basicAuth, (req, res, next) => {
-  try {
+  
     const user = {
       user: req.user,
       token: req.user.token
     };
     res.status(200).json(user);
     
-  } catch (error) {
-    res.status(403).send("routs/Invalid basicAuth Login"); 
-  }
+   
+    // res.status(403).send("routs/Invalid basicAuth Login"); 
+ 
 });
 
 authRouter.get('/users', bearerAuth, async (req, res, next) => {
-  // const users = await User.find({});
-  // const list = users.map(user => user.username);
+  const users = await User.find({});
+  const list = users.map(user => user.username);
   res.status(200).json({ user: req.user ,token: req.token});
 });
 

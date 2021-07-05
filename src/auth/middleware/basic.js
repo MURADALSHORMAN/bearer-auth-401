@@ -9,13 +9,13 @@ module.exports = async (req, res, next) => {
   if (!req.headers.authorization) { return _authError(); }
 
   let basic = req.headers.authorization.split(' ');
-  let encodedString = basic.pop();
-  let decodedString = base64.decode(encodedString);
-  let [username, password] = decodedString.split(':');
+  // let encodedString = basic.pop();
   if(basic[0] !== 'Basic'){
     next('invalid login / basic')
     return;
   }
+  let decodedString = base64.decode(basic[1]);
+  let [username, password] = decodedString.split(':');
 
   try {
     req.user = await User.authenticateBasic(username, password);
@@ -25,19 +25,3 @@ module.exports = async (req, res, next) => {
   }
 
 }
-
-// module.exports = async (req, res, next) => {
-
-//   if (!req.headers.authorization) { return _authError(); }
-
-//   let basic = req.headers.authorization;
-//   let [user, pass] = base64.decode(basic).split(':');
-
-//   try {
-//     req.user = await User.authenticateBasic(user, pass)
-//     next();
-//   } catch (e) {
-//     res.status(403).send('Invalid Login');
-//   }
-
-// }
